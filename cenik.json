@@ -1,0 +1,46 @@
+[
+  {
+    "tier": "Základní",
+    "name": "Čistý start",
+    "price": "890",
+    "featured": false,
+    "badge": null,
+    "items": [
+      "Ruční mytí exteriéru",
+      "Oplach kol a podběhů",
+      "Vysátí interiéru",
+      "Otření palubní desky",
+      "Čištění oken zevnitř"
+    ]
+  },
+  {
+    "tier": "Kompletní",
+    "name": "Detailing Premium",
+    "price": "2 490",
+    "featured": true,
+    "badge": "✦ Nejoblíbenější",
+    "items": [
+      "Vše ze základního balíčku",
+      "Hloubkové čištění interiéru",
+      "Dezinfekce klimatizace",
+      "Ošetření plastů a kůže",
+      "Voskování laku",
+      "Čištění motorového prostoru"
+    ]
+  },
+  {
+    "tier": "Profesionální",
+    "name": "Full Detail",
+    "price": "4 990",
+    "featured": false,
+    "badge": null,
+    "items": [
+      "Vše z Premium balíčku",
+      "Leštění laku (1-krok)",
+      "Keramická ochrana laku",
+      "Impregnace čalounění",
+      "Ošetření prahů a gumiček",
+      "Vůně interiéru dle výběru"
+    ]
+  }
+]

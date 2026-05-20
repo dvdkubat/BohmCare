@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Böhm Garage Care – Profesionální čištění vozidel</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1a6bff;
+    --blue-light: #4d8fff;
+    --blue-pale: #e8f0ff;
+    --aqua: #00c9d4;
+    --dark: #0d1117;
+    --mid: #3a4555;
+    --gray: #8492a6;
+    --light: #f4f7fb;
+    --white: #ffffff;
+    --shadow: 0 8px 32px rgba(26,107,255,0.10);
+    --radius: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 68px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(26,107,255,0.08);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 24px rgba(26,107,255,0.12); }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.7rem;
+    letter-spacing: 2px;
+    color: var(--dark);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo span { color: var(--blue); }
+
+  .nav-links { display: flex; gap: 4px; list-style: none; }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--mid);
+    padding: 7px 14px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.25s;
+  }
+  .nav-links a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(26,107,255,0.08) 50%, transparent 100%);
+    transform: translateX(-120%);
+    transition: transform 0.4s ease;
+    pointer-events: none;
+  }
+  .nav-links a:hover::before { transform: translateX(120%); }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-links a.active { color: var(--blue); background: var(--blue-pale); }
+
+  .nav-cta {
+    background: var(--blue);
+    color: var(--white) !important;
+    padding: 9px 22px !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+  }
+  .nav-cta::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s, opacity 0.5s;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .nav-cta:hover::after { width: 200px; height: 200px; opacity: 1; }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,107,255,0.35); }
+  .nav-cta::before { display: none !important; }
+
+  /* ===== HERO ===== */
+  #hero {
+    margin-top: 68px;
+    position: relative;
+    background: var(--light);
+    overflow: hidden;
+  }
+
+  .hero-image-slot {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: #111;
+  }
+  /* Shimmer efekt odstraněn – žádný ::before */
+  .hero-image-slot img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Bubble canvas sits over hero image */
+  #bubbleCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: all;
+    z-index: 2;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 56px 64px 60px;
+    background: linear-gradient(to top, rgba(13,17,23,0.72) 0%, transparent 100%);
+    z-index: 3;
+    pointer-events: none;
+  }
+  .hero-overlay .hero-btns { pointer-events: all; }
+  .hero-overlay h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 4.8rem);
+    letter-spacing: 3px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .hero-overlay h1 em { color: var(--aqua); font-style: normal; }
+  .hero-overlay p {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.82);
+    max-width: 480px;
+    margin-bottom: 24px;
+    font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-block;
+    padding: 13px 32px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary {
+    background: var(--blue);
+    color: var(--white);
+    box-shadow: 0 4px 16px rgba(26,107,255,0.35);
+  }
+  .btn-outline {
+    background: rgba(255,255,255,0.15);
+    color: var(--white);
+    border: 1.5px solid rgba(255,255,255,0.55);
+    backdrop-filter: blur(6px);
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.55s ease;
+    pointer-events: none;
+  }
+  .btn:hover::after { left: 160%; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary:hover { box-shadow: 0 8px 24px rgba(26,107,255,0.45); }
+
+  /* ===== SECTIONS ===== */
+  .section { display: none; padding: 80px 0 60px; }
+  .section.active { display: block; animation: fadeUp 0.45s ease; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+  .section-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: 2px;
+    color: var(--dark);
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+  .section-sub {
+    color: var(--gray);
+    font-size: 1rem;
+    max-width: 560px;
+    margin-bottom: 48px;
+    font-weight: 300;
+    line-height: 1.65;
+  }
+
+  /* ===== LOADING STATE ===== */
+  .loading-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    color: var(--gray);
+    font-size: 0.9rem;
+    gap: 10px;
+  }
+  .loading-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+    animation: loadBounce 0.8s ease-in-out infinite;
+  }
+  .loading-dot:nth-child(2) { animation-delay: 0.15s; }
+  .loading-dot:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes loadBounce {
+    0%, 100% { transform: translateY(0); opacity: 0.4; }
+    50% { transform: translateY(-8px); opacity: 1; }
+  }
+
+  /* ===== INFO ===== */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .info-text p {
+    color: var(--mid);
+    line-height: 1.8;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+  .info-text strong { color: var(--dark); font-weight: 500; }
+  .info-cards { display: flex; flex-direction: column; gap: 16px; }
+  .info-card {
+    background: var(--light);
+    border-radius: var(--radius);
+    padding: 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    border: 1px solid rgba(26,107,255,0.07);
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .info-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: linear-gradient(90deg, rgba(26,107,255,0.08), transparent);
+    transition: width 0.4s ease;
+    pointer-events: none;
+  }
+  .info-card:hover::before { width: 100%; }
+  .info-card:hover { transform: translateX(6px); box-shadow: var(--shadow); }
+  .info-icon {
+    font-size: 1.6rem;
+    min-width: 44px;
+    height: 44px;
+    background: var(--blue-pale);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .info-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; color: var(--dark); }
+  .info-card p { font-size: 0.85rem; color: var(--gray); line-height: 1.5; margin: 0; }
+
+  /* ===== CENÍK ===== */
+  .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .price-card {
+    border-radius: var(--radius);
+    padding: 32px 28px 36px;
+    border: 1.5px solid rgba(26,107,255,0.12);
+    background: var(--white);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  }
+  .price-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--blue), var(--aqua));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+    pointer-events: none;
+  }
+  .price-card:hover::after { transform: scaleX(1); }
+  .price-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: var(--blue); }
+  .price-card.featured {
+    background: linear-gradient(145deg, var(--blue) 0%, #1254cc 100%);
+    color: white;
+    border-color: transparent;
+  }
+  .price-card.featured::after { display: none; }
+  .price-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 50px;
+    margin-bottom: 16px;
+  }
+  .price-card .tier { font-size: 0.78rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
+  .price-card.featured .tier { color: rgba(255,255,255,0.75); }
+  .price-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 1px; margin-bottom: 4px; }
+  .price-card.featured h3 { color: white; }
+  .price-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 1px;
+    color: var(--blue);
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin: 16px 0;
+  }
+  .price-card.featured .price-amount { color: white; }
+  .price-amount sup { font-size: 1.2rem; font-family: 'DM Sans', sans-serif; font-weight: 500; }
+  .price-amount .unit { font-size: 1rem; font-family: 'DM Sans', sans-serif; font-weight: 300; color: var(--gray); }
+  .price-card.featured .price-amount .unit { color: rgba(255,255,255,0.65); }
+  .price-list { list-style: none; margin: 0 0 28px; }
+  .price-list li {
+    padding: 8px 0;
+    font-size: 0.88rem;
+    color: var(--mid);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(26,107,255,0.06);
+  }
+  .price-card.featured .price-list li { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.1); }
+  .price-list li::before { content: '✓'; color: var(--blue); font-weight: 700; font-size: 0.8rem; }
+  .price-card.featured .price-list li::before { color: var(--aqua); }
+
+  /* ===== GALERIE ===== */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 220px;
+    gap: 12px;
+  }
+  .gallery-item {
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--blue-pale);
+    position: relative;
+    cursor: pointer;
+  }
+  .gallery-item.wide { grid-column: span 2; }
+  .gallery-item.tall { grid-row: span 2; }
+  .gallery-placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(26,107,255,0.4);
+    background: linear-gradient(135deg, var(--blue-pale), #d4e4ff);
+    transition: filter 0.3s;
+  }
+  .gallery-item:hover .gallery-placeholder { filter: brightness(0.94); }
+  .gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,107,255,0.7) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.35s;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    pointer-events: none;
+  }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-overlay span { color: white; font-size: 0.85rem; font-weight: 500; }
+
+  /* ===== REFERENCE ===== */
+  .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .review-card {
+    background: var(--light);
+    border-radius: var(--radius);
+    padding: 28px;
+    border: 1px solid rgba(26,107,255,0.07);
+    position: relative;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .review-card::before {
+    content: '"';
+    position: absolute;
+    top: 16px; right: 20px;
+    font-size: 5rem;
+    font-family: Georgia, serif;
+    color: rgba(26,107,255,0.08);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .review-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .stars { color: #f5a623; font-size: 1rem; margin-bottom: 12px; letter-spacing: 2px; }
+  .review-text { font-size: 0.9rem; color: var(--mid); line-height: 1.7; margin-bottom: 20px; font-weight: 300; font-style: italic; }
+  .reviewer { display: flex; align-items: center; gap: 12px; }
+  .reviewer-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--aqua));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .reviewer-name { font-weight: 600; font-size: 0.88rem; color: var(--dark); }
+  .reviewer-car { font-size: 0.78rem; color: var(--gray); }
+
+  /* ===== VYBAVENÍ ===== */
+  .equip-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .equip-item {
+    background: var(--light);
+    border-radius: var(--radius);
+    padding: 28px 28px 28px 24px;
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 20px;
+    align-items: start;
+    border: 1px solid rgba(26,107,255,0.07);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .equip-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--aqua));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s ease;
+    pointer-events: none;
+  }
+  .equip-item:hover::before { transform: scaleX(1); }
+  .equip-item:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .equip-icon-wrap {
+    width: 60px; height: 60px;
+    background: var(--blue-pale);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+  }
+  .equip-item h4 { font-weight: 600; font-size: 1rem; color: var(--dark); margin-bottom: 6px; }
+  .equip-item p { font-size: 0.85rem; color: var(--gray); line-height: 1.6; font-weight: 300; }
+
+  /* ===== REZERVACE ===== */
+  .rezervace-layout { display: grid; grid-template-columns: 1fr 420px; gap: 60px; align-items: start; }
+  .rezervace-info p { color: var(--mid); font-weight: 300; line-height: 1.8; margin-bottom: 16px; }
+  .contact-block { margin-top: 32px; display: flex; flex-direction: column; gap: 14px; }
+  .contact-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    background: var(--light);
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--dark);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .contact-row:hover { background: var(--blue-pale); transform: translateX(4px); }
+  .contact-row .ci { font-size: 1.2rem; }
+  .form-card {
+    background: var(--light);
+    border-radius: var(--radius);
+    padding: 36px;
+    border: 1px solid rgba(26,107,255,0.1);
+  }
+  .form-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 2px; color: var(--dark); margin-bottom: 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--mid); margin-bottom: 6px; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid rgba(26,107,255,0.14);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--dark);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(26,107,255,0.1);
+  }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 8px;
+  }
+  .btn-submit::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.55s ease;
+    pointer-events: none;
+  }
+  .btn-submit:hover::after { left: 160%; }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,107,255,0.4); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--dark);
+    padding: 48px 40px 32px;
+    text-align: center;
+  }
+  footer .foot-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    color: white;
+    margin-bottom: 12px;
+  }
+  footer .foot-logo span { color: var(--aqua); }
+  footer p { color: var(--gray); font-size: 0.82rem; margin-bottom: 4px; }
+  footer .foot-copy { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; color: #4a5568; }
+
+  /* ===== WATER DROPS ON CLICK ===== */
+  .water-drop {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.7), rgba(26,107,255,0.2));
+    animation: dropFall 1s ease-out forwards;
+    z-index: 9999;
+  }
+  @keyframes dropFall {
+    0% { transform: scale(0); opacity: 0.8; }
+    60% { transform: scale(1); opacity: 0.4; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero-overlay { padding: 32px 28px 40px; }
+    .info-grid, .price-grid, .reviews-grid, .equip-grid, .rezervace-layout { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-item.wide { grid-column: span 1; }
+    .container { padding: 0 20px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="logo">Böhm <span>Garage Care</span></a>
+  <ul class="nav-links">
+    <li><a href="#" data-section="info" class="nav-link active">Info</a></li>
+    <li><a href="#" data-section="cenik" class="nav-link">Ceník</a></li>
+    <li><a href="#" data-section="galerie" class="nav-link">Galerie</a></li>
+    <li><a href="#" data-section="reference" class="nav-link">Reference</a></li>
+    <li><a href="#" data-section="vybaveni" class="nav-link">Vybavení</a></li>
+    <li><a href="#" data-section="rezervace" class="nav-link nav-cta">Rezervace</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-image-slot" id="heroImageSlot">
+    <img src="logo.png" alt="Böhm Garage Care">
+    <!-- Bubble canvas over the image -->
+    <canvas id="bubbleCanvas"></canvas>
+  </div>
+  <div class="hero-overlay">
+    <h1>Váš vůz zasluhuje<br><em>dokonalou péči</em></h1>
+    <p>Profesionální čištění a detailing vozidel. Vrátíme vašemu autu zářivý vzhled, na který budete hrdí.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn btn-primary" data-section="rezervace">Objednat se</a>
+      <a href="#" class="btn btn-outline" data-section="cenik">Prohlédnout ceník</a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main>
+
+  <!-- INFO -->
+  <section class="section active" id="section-info">
+    <div class="container">
+      <div class="section-label">O nás</div>
+      <h2 class="section-title">Proč si vybrat Böhm Garage Care?</h2>
+      <p class="section-sub">S více než 8 lety zkušeností v péči o vozidla nabízíme profesionální detailing, který ochrání a zkrášlí váš automobil.</p>
+      <div class="info-grid">
+        <div class="info-text">
+          <p>Jsme rodinná firma se sídlem v centru města, specializující se na <strong>ruční mytí, interiérové čištění a kompletní detailing</strong> všech typů vozidel. Každé auto přistupujeme individuálně — od malého city car až po SUV nebo dodávku.</p>
+          <p>Používáme výhradně <strong>prémiové profesionální přípravky</strong> šetrné k laku i životnímu prostředí. Naše práce je zárukou výsledků, které si všimnou i náročnější zákazníci.</p>
+          <p>Klademe důraz na <strong>preciznost a detail</strong>. Nenecháme váš vůz odjet dříve, dokud sami nejsme spokojeni s výsledkem.</p>
+          <p>Objednání je jednoduché — přes formulář, telefon nebo WhatsApp. Flexibilně se přizpůsobíme vašemu rozvrhu.</p>
+        </div>
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-icon">🏆</div>
+            <div><h4>8+ let zkušeností</h4><p>Stovky spokojených zákazníků a stovky ošetřených vozidel za námi hovoří.</p></div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">🌿</div>
+            <div><h4>Ekologické přípravky</h4><p>Všechny čisticí prostředky jsou biodegradabilní a bezpečné pro životní prostředí.</p></div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">⏱️</div>
+            <div><h4>Rychlé termíny</h4><p>Objednáme vás nejpozději do 3 pracovních dnů. Expresní servis na požádání.</p></div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">✅</div>
+            <div><h4>Záruka spokojenosti</h4><p>Pokud nejste spokojeni, přijeďte zpět — doděláme zdarma.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CENÍK – načítá se z cenik.json -->
+  <section class="section" id="section-cenik">
+    <div class="container">
+      <div class="section-label">Ceník služeb</div>
+      <h2 class="section-title">Transparentní ceny,<br>žádná překvapení</h2>
+      <p class="section-sub">Vyberte si balíček, který odpovídá vašim potřebám. Ceny platí pro standardní osobní vozidla. SUV a dodávky + 20 %.</p>
+      <div class="price-grid" id="price-grid">
+        <div class="loading-placeholder">
+          <div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIE -->
+  <section class="section" id="section-galerie">
+    <div class="container">
+      <div class="section-label">Naše práce</div>
+      <h2 class="section-title">Galerie výsledků</h2>
+      <p class="section-sub">Každá fotografie vypovídá o preciznosti naší práce. Brzy zde přibydou skutečné fotografie z realizací.</p>
+      <div class="gallery-grid">
+        <div class="gallery-item wide"><div class="gallery-placeholder">🚗 Exteriér – před/po</div><div class="gallery-overlay"><span>Leštění laku – Audi A6</span></div></div>
+        <div class="gallery-item tall"><div class="gallery-placeholder">✨ Detailing</div><div class="gallery-overlay"><span>Čištění interiéru – BMW X5</span></div></div>
+        <div class="gallery-item"><div class="gallery-placeholder">🧽 Čalounění</div><div class="gallery-overlay"><span>Hloubkové čištění – VW Golf</span></div></div>
+        <div class="gallery-item"><div class="gallery-placeholder">💧 Mytí</div><div class="gallery-overlay"><span>Ruční mytí – Mercedes GLC</span></div></div>
+        <div class="gallery-item wide"><div class="gallery-placeholder">🏎️ Výsledek</div><div class="gallery-overlay"><span>Full Detailing – Porsche Cayenne</span></div></div>
+        <div class="gallery-item"><div class="gallery-placeholder">🪟 Okna</div><div class="gallery-overlay"><span>Čištění skel – Škoda Octavia</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFERENCE – načítá se z reference.json -->
+  <section class="section" id="section-reference">
+    <div class="container">
+      <div class="section-label">Recenze zákazníků</div>
+      <h2 class="section-title">Co říkají naši zákazníci</h2>
+      <p class="section-sub">Přes 200 spokojených zákazníků. Průměrné hodnocení 4,9 / 5 z více než 180 recenzí.</p>
+      <div class="reviews-grid" id="reviews-grid">
+        <div class="loading-placeholder">
+          <div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VYBAVENÍ -->
+  <section class="section" id="section-vybaveni">
+    <div class="container">
+      <div class="section-label">Náš arzenál</div>
+      <h2 class="section-title">Profesionální vybavení</h2>
+      <p class="section-sub">Pracujeme pouze s prověřenou profesionální technikou a certifikovanými přípravky. Žádné kompromisy.</p>
+      <div class="equip-grid">
+        <div class="equip-item"><div class="equip-icon-wrap">🔫</div><div><h4>Vysokotlaký čistič Kärcher HD 5/15</h4><p>Profesionální vysokotlaká myčka s výkonem 150 bar. Ideální pro bezpečné mytí laku i podvozku bez poškrábání.</p></div></div>
+        <div class="equip-item"><div class="equip-icon-wrap">🌀</div><div><h4>Rotační leštička Rupes LHR 21</h4><p>Přesná excentrická leštička pro dokonalé vybroušení a leštění laku. Používáme prémiové kotouče Meguiar's a Koch Chemie.</p></div></div>
+        <div class="equip-item"><div class="equip-icon-wrap">💨</div><div><h4>Průmyslový vysavač Nilfisk</h4><p>Výkonný mokro-suchý vysavač s HEPA filtrem. Dokonalé vysátí i nejmenšího koutu interiéru, koberce jako nové.</p></div></div>
+        <div class="equip-item"><div class="equip-icon-wrap">♨️</div><div><h4>Parní čistič Kärcher SC 5</h4><p>Pára pod tlakem 3,5 bar pro hygienické čištění čalounění, kůže a plastů bez agresivní chemie. Ničí bakterie i roztoče.</p></div></div>
+        <div class="equip-item"><div class="equip-icon-wrap">🧴</div><div><h4>Přípravky Koch Chemie & Gyeon</h4><p>Prémiová německá a korejská chemie pro profesionální detailing. Certifikované, šetrné k laku i životnímu prostředí.</p></div></div>
+        <div class="equip-item"><div class="equip-icon-wrap">🛡️</div><div><h4>Keramická ochrana Gyeon Q² One</h4><p>Profesionální keramická ochrana laku s hydrofobním efektem na 18–24 měsíců. Chrání před UV zářením, nečistotami i škrábanci.</p></div></div>
+        <div class="equip-item"><div class="equip-icon-wrap">🪣</div><div><h4>Two-Bucket metoda</h4><p>Mytí technikou dvou kbelíků zabraňuje přenesení nečistot na lak. Mikrovláknové žínky Meguiar's pro nulové riziko poškrábání.</p></div></div>
+        <div class="equip-item"><div class="equip-icon-wrap">💡</div><div><h4>LED diagnostická lampa</h4><p>Profesionální světlo pro kontrolu laku po dokončení práce. Každý vůz je zkontrolován pod lampou dříve, než ho předáme.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REZERVACE -->
+  <section class="section" id="section-rezervace">
+    <div class="container">
+      <div class="section-label">Kontakt & rezervace</div>
+      <h2 class="section-title">Objednejte se online</h2>
+      <p class="section-sub">Vyplňte formulář a ozveme se vám do 24 hodin s potvrzením termínu. Alternativně nás kontaktujte přímo.</p>
+      <div class="rezervace-layout">
+        <div class="rezervace-info">
+          <p>Jsme k dispozici <strong>pondělí – sobota, 7:00 – 19:00</strong>. Výjezd k zákazníkovi možný do 30 km od Prahy.</p>
+          <p>Pro expresní objednávky (do 24 h) nás kontaktujte telefonicky nebo přes WhatsApp.</p>
+          <div class="contact-block">
+            <div class="contact-row"><span class="ci">📞</span> +420 777 123 456</div>
+            <div class="contact-row"><span class="ci">💬</span> WhatsApp: +420 777 123 456</div>
+            <div class="contact-row"><span class="ci">📧</span> info@bohmgaragecare.cz</div>
+            <div class="contact-row"><span class="ci">📍</span> Ulice příkladná 12, Praha 5</div>
+            <div class="contact-row"><span class="ci">🕐</span> Po–Pá: 7:00–19:00 &nbsp;|&nbsp; So: 8:00–16:00</div>
+          </div>
+        </div>
+        <div class="form-card">
+          <h3>Rezervační formulář</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Jméno a příjmení</label><input type="text" placeholder="Jan Novák"></div>
+            <div class="form-group"><label>Telefon</label><input type="tel" placeholder="+420 777 000 000"></div>
+          </div>
+          <div class="form-group"><label>E-mail</label><input type="email" placeholder="jan@email.cz"></div>
+          <div class="form-group"><label>Vozidlo (značka, model, rok)</label><input type="text" placeholder="Škoda Octavia III, 2019"></div>
+          <div class="form-group">
+            <label>Požadovaný balíček</label>
+            <select id="rezervace-balicek">
+              <option value="">— Vyberte balíček —</option>
+              <option>Čistý start (od 890 Kč)</option>
+              <option>Detailing Premium (od 2 490 Kč)</option>
+              <option>Full Detail (od 4 990 Kč)</option>
+              <option>Jiné / konzultace</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Preferovaný termín</label><input type="date"></div>
+          <div class="form-group"><label>Poznámka</label><textarea placeholder="Speciální požadavky, přístup k vozidlu apod."></textarea></div>
+          <button class="btn-submit" onclick="handleSubmit(event)">💧 Odeslat rezervaci</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-logo">Böhm <span>Garage Care</span></div>
+  <p>Profesionální čištění a detailing vozidel</p>
+  <p>Ulice příkladná 12, Praha 5 &nbsp;|&nbsp; +420 777 123 456 &nbsp;|&nbsp; info@bohmgaragecare.cz</p>
+  <p class="foot-copy">© 2025 Böhm Garage Care – Všechna práva vyhrazena</p>
+</footer>
+
+<script>
+/* =============================================
+   SECTION SWITCHING
+   ============================================= */
+function switchSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+  const sec = document.getElementById('section-' + name);
+  if (sec) sec.classList.add('active');
+  const link = document.querySelector('[data-section="' + name + '"].nav-link');
+  if (link) link.classList.add('active');
+  window.scrollTo({ top: document.getElementById('hero').offsetHeight + 68, behavior: 'smooth' });
+
+  // Lazy-load data sections on first visit
+  if (name === 'cenik') loadCenik();
+  if (name === 'reference') loadReference();
+}
+
+document.querySelectorAll('[data-section]').forEach(el => {
+  el.addEventListener('click', function(e) {
+    e.preventDefault();
+    switchSection(this.dataset.section);
+  });
+});
+
+// Sticky nav
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+
+/* =============================================
+   LOAD CENÍK FROM JSON
+   ============================================= */
+let cenikLoaded = false;
+async function loadCenik() {
+  if (cenikLoaded) return;
+  cenikLoaded = true;
+  const grid = document.getElementById('price-grid');
+  try {
+    const res = await fetch('cenik.json');
+    const data = await res.json();
+    grid.innerHTML = data.map(card => `
+      <div class="price-card ${card.featured ? 'featured' : ''}">
+        ${card.badge ? `<div class="price-badge">${card.badge}</div>` : ''}
+        <div class="tier">${card.tier}</div>
+        <h3>${card.name}</h3>
+        <div class="price-amount"><sup>od</sup>${card.price}<span class="unit"> Kč</span></div>
+        <ul class="price-list">
+          ${card.items.map(i => `<li>${i}</li>`).join('')}
+        </ul>
+        <a href="#" class="btn ${card.featured ? '' : 'btn-primary'}"
+           ${card.featured ? 'style="background:white;color:var(--blue);font-weight:700;"' : ''}
+           data-section="rezervace">Objednat</a>
+      </div>
+    `).join('');
+    // Re-bind new buttons
+    grid.querySelectorAll('[data-section]').forEach(el =>
+      el.addEventListener('click', e => { e.preventDefault(); switchSection(el.dataset.section); })
+    );
+  } catch(e) {
+    grid.innerHTML = '<p style="color:var(--gray);padding:20px;">Nepodařilo se načíst ceník. Zkontrolujte soubor cenik.json.</p>';
+  }
+}
+
+/* =============================================
+   LOAD REFERENCE FROM JSON
+   ============================================= */
+let refLoaded = false;
+async function loadReference() {
+  if (refLoaded) return;
+  refLoaded = true;
+  const grid = document.getElementById('reviews-grid');
+  try {
+    const res = await fetch('reference.json');
+    const data = await res.json();
+    grid.innerHTML = data.map(r => `
+      <div class="review-card">
+        <div class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
+        <p class="review-text">${r.text}</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">${r.initials}</div>
+          <div>
+            <div class="reviewer-name">${r.name}</div>
+            <div class="reviewer-car">${r.car}</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    grid.innerHTML = '<p style="color:var(--gray);padding:20px;">Nepodařilo se načíst reference. Zkontrolujte soubor reference.json.</p>';
+  }
+}
+
+/* =============================================
+   WATER DROP CLICK EFFECT
+   ============================================= */
+document.addEventListener('click', function(e) {
+  // Don't spawn drops on canvas (bubbles handle their own feedback)
+  if (e.target.id === 'bubbleCanvas') return;
+  for (let i = 0; i < 5; i++) {
+    setTimeout(() => {
+      const size = 18 + Math.random() * 24;
+      const drop = document.createElement('div');
+      drop.classList.add('water-drop');
+      drop.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - size/2 + (Math.random()-0.5)*60}px;top:${e.clientY - size/2 + (Math.random()-0.5)*60}px;`;
+      document.body.appendChild(drop);
+      setTimeout(() => drop.remove(), 1100);
+    }, i * 60);
+  }
+});
+
+/* =============================================
+   FORM SUBMIT
+   ============================================= */
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target;
+  btn.textContent = '✅ Odesláno! Brzy vás kontaktujeme.';
+  btn.style.background = 'linear-gradient(135deg, #00c9d4, #1a6bff)';
+  btn.style.pointerEvents = 'none';
+  setTimeout(() => {
+    btn.textContent = '💧 Odeslat rezervaci';
+    btn.style.background = '';
+    btn.style.pointerEvents = '';
+  }, 4000);
+}
+
+/* =============================================
+   BUBBLE CANVAS
+   ============================================= */
+(function() {
+  const canvas = document.getElementById('bubbleCanvas');
+  const slot   = document.getElementById('heroImageSlot');
+  const ctx    = canvas.getContext('2d');
+
+  let W, H, mouse = { x: -999, y: -999 };
+  const BUBBLES = [];
+  const COUNT   = 18;
+
+  function resize() {
+    const r = slot.getBoundingClientRect();
+    W = canvas.width  = r.width;
+    H = canvas.height = r.height;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Track mouse relative to canvas
+  canvas.addEventListener('mousemove', e => {
+    const r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+  });
+  canvas.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
+
+  // Pop bubble on click
+  canvas.addEventListener('click', e => {
+    const r = canvas.getBoundingClientRect();
+    const cx = e.clientX - r.left;
+    const cy = e.clientY - r.top;
+    BUBBLES.forEach(b => {
+      const dx = cx - b.x, dy = cy - b.y;
+      if (Math.sqrt(dx*dx + dy*dy) < b.r + 8) popBubble(b);
+    });
+  });
+
+  function popBubble(b) {
+    if (b.popping) return;
+    b.popping = true;
+    b.popT = 0;
+    // Respawn after pop animation
+    setTimeout(() => {
+      b.x = Math.random() * W;
+      b.y = H + b.r + 10;
+      b.vx = (Math.random() - 0.5) * 0.5;
+      b.vy = -(0.3 + Math.random() * 0.5);
+      b.r  = 12 + Math.random() * 28;
+      b.opacity = 0.55 + Math.random() * 0.3;
+      b.wobble = Math.random() * Math.PI * 2;
+      b.wobbleSpeed = 0.01 + Math.random() * 0.015;
+      b.popping = false;
+    }, 400);
+  }
+
+  function spawnBubble() {
+    return {
+      x: Math.random() * (W || 800),
+      y: (H || 500) + Math.random() * 200,
+      r: 12 + Math.random() * 28,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: -(0.3 + Math.random() * 0.5),
+      opacity: 0.55 + Math.random() * 0.3,
+      wobble: Math.random() * Math.PI * 2,
+      wobbleSpeed: 0.01 + Math.random() * 0.015,
+      popping: false,
+      popT: 0
+    };
+  }
+
+  for (let i = 0; i < COUNT; i++) {
+    const b = spawnBubble();
+    b.y = Math.random() * (H || 500); // start spread across canvas
+    BUBBLES.push(b);
+  }
+
+  function drawBubble(b) {
+    ctx.save();
+    ctx.translate(b.x, b.y);
+
+    if (b.popping) {
+      // Pop burst: expanding ring fading out
+      const t  = b.popT;
+      const pr = b.r + t * 40;
+      ctx.globalAlpha = Math.max(0, 0.8 - t * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+      ctx.lineWidth   = 2;
+      ctx.beginPath();
+      ctx.arc(0, 0, pr, 0, Math.PI * 2);
+      ctx.stroke();
+      // Tiny droplets radiating out
+      for (let i = 0; i < 6; i++) {
+        const angle = (i / 6) * Math.PI * 2;
+        const dr = t * 55;
+        ctx.beginPath();
+        ctx.arc(Math.cos(angle)*dr, Math.sin(angle)*dr, 3*(1-t*1.5), 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(200,230,255,0.9)';
+        ctx.fill();
+      }
+      ctx.restore();
+      return;
+    }
+
+    const alpha = b.opacity;
+
+    // Outer ring
+    ctx.globalAlpha = alpha * 0.7;
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+    ctx.lineWidth   = 1.5;
+    ctx.beginPath();
+    ctx.arc(0, 0, b.r, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Translucent fill
+    const grad = ctx.createRadialGradient(-b.r*0.25, -b.r*0.3, b.r*0.05, 0, 0, b.r);
+    grad.addColorStop(0,   'rgba(255,255,255,0.25)');
+    grad.addColorStop(0.4, 'rgba(180,220,255,0.1)');
+    grad.addColorStop(1,   'rgba(100,180,255,0.06)');
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle   = grad;
+    ctx.beginPath();
+    ctx.arc(0, 0, b.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Highlight glare top-left
+    ctx.globalAlpha = alpha * 0.7;
+    const glare = ctx.createRadialGradient(-b.r*0.3, -b.r*0.35, 0, -b.r*0.3, -b.r*0.35, b.r*0.45);
+    glare.addColorStop(0,   'rgba(255,255,255,0.7)');
+    glare.addColorStop(1,   'rgba(255,255,255,0)');
+    ctx.fillStyle = glare;
+    ctx.beginPath();
+    ctx.arc(0, 0, b.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Small bottom-right reflection
+    ctx.globalAlpha = alpha * 0.3;
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.beginPath();
+    ctx.arc(b.r*0.35, b.r*0.35, b.r*0.18, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+
+    BUBBLES.forEach(b => {
+      if (b.popping) {
+        b.popT += 0.05;
+        drawBubble(b);
+        return;
+      }
+
+      // Float upward with wobble
+      b.wobble += b.wobbleSpeed;
+      b.x += b.vx + Math.sin(b.wobble) * 0.35;
+      b.y += b.vy;
+
+      // Mouse repulsion — gently push bubbles away
+      const dx = b.x - mouse.x;
+      const dy = b.y - mouse.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      const repulseR = b.r + 55;
+      if (dist < repulseR && dist > 0) {
+        const force = (repulseR - dist) / repulseR * 1.2;
+        b.x += (dx / dist) * force;
+        b.y += (dy / dist) * force;
+      }
+
+      // Wrap left/right
+      if (b.x < -b.r)  b.x = W + b.r;
+      if (b.x > W+b.r) b.x = -b.r;
+
+      // Respawn when floated off top
+      if (b.y < -b.r * 2) {
+        b.x = Math.random() * W;
+        b.y = H + b.r + 10;
+        b.vx = (Math.random() - 0.5) * 0.5;
+        b.vy = -(0.3 + Math.random() * 0.5);
+        b.r  = 12 + Math.random() * 28;
+        b.opacity = 0.55 + Math.random() * 0.3;
+      }
+
+      drawBubble(b);
+    });
+
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+</script>
+</body>
+</html>

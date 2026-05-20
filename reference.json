@@ -1,0 +1,44 @@
+[
+  {
+    "stars": 5,
+    "text": "Nechal jsem vyčistit interiér po zimě – přišel se svačinou a odešel s takřka novým autem. Naprosto perfektní práce, doporučuji každému!",
+    "initials": "PK",
+    "name": "Pavel Kovář",
+    "car": "BMW 5 F10"
+  },
+  {
+    "stars": 5,
+    "text": "Komplexní detailing před prodejem vozu. Cena naprosto odpovídá kvalitě. Auto vypadalo jako z autosalonu a prodalo se za lepší cenu, než jsem čekala.",
+    "initials": "MN",
+    "name": "Markéta Nováková",
+    "car": "Audi A3 Sportback"
+  },
+  {
+    "stars": 5,
+    "text": "Pravidelný zákazník, chodím sem každé jaro a podzim. Vždy přesný termín, vždy skvělý výsledek. Nic bych neměnil.",
+    "initials": "TO",
+    "name": "Tomáš Ondráček",
+    "car": "Škoda Superb III"
+  },
+  {
+    "stars": 4,
+    "text": "Přijeli jsme s autem po dovolené plném písku. Za 4 hodiny jako by se nic nestalo. Moc spokojeni, příšte zkusíme Full Detail.",
+    "initials": "JB",
+    "name": "Jana Blahová",
+    "car": "VW Tiguan"
+  },
+  {
+    "stars": 5,
+    "text": "Přátelský přístup, férová cena a výsledek, který předčil moje očekávání. Kůže v interiéru jako nová, lak zrcadlový. Výborná práce!",
+    "initials": "LH",
+    "name": "Lukáš Horák",
+    "car": "Mercedes C-Class W206"
+  },
+  {
+    "stars": 5,
+    "text": "Objednávka přes formulář šla hladce, termín do 2 dnů. Servis trval déle, než jsem čekal, ale výsledek stál za to. Určitě se vrátím!",
+    "initials": "RŠ",
+    "name": "Radek Šimánek",
+    "car": "Porsche Macan"
+  }
+]
