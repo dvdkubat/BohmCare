@@ -33,13 +33,13 @@
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 100;
+    z-index: 200;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 48px;
     height: 68px;
-    background: rgba(255,255,255,0.92);
+    background: rgba(255,255,255,0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(26,107,255,0.08);
     transition: box-shadow 0.3s;
@@ -55,6 +55,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    position: relative;
+    z-index: 2;
   }
   .logo span { color: var(--blue); }
 
@@ -108,6 +110,93 @@
   .nav-cta:hover::after { width: 200px; height: 200px; opacity: 1; }
   .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,107,255,0.35); }
   .nav-cta::before { display: none !important; }
+
+  /* ===== HAMBURGER BUTTON ===== */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 10px;
+    transition: background 0.2s;
+    position: relative;
+    z-index: 2;
+  }
+  .hamburger:hover { background: var(--blue-pale); }
+  .hamburger .bar {
+    width: 22px;
+    height: 2px;
+    background: var(--dark);
+    border-radius: 2px;
+    transition: transform 0.35s ease, opacity 0.25s ease, width 0.25s ease;
+    transform-origin: center;
+  }
+  .hamburger.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open .bar:nth-child(2) { opacity: 0; width: 0; }
+  .hamburger.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ===== MOBILE DRAWER ===== */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 68px; left: 0; right: 0;
+    z-index: 190;
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(26,107,255,0.1);
+    padding: 12px 16px 20px;
+    transform: translateY(-110%);
+    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 12px 40px rgba(26,107,255,0.12);
+  }
+  .mobile-menu.open { transform: translateY(0); }
+  .mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .mobile-menu a {
+    display: block;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--mid);
+    padding: 13px 16px;
+    border-radius: 12px;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+  }
+  .mobile-menu a:hover,
+  .mobile-menu a.active { background: var(--blue-pale); color: var(--blue); transform: translateX(4px); }
+  .mobile-menu .mob-cta {
+    margin-top: 8px;
+    display: block;
+    text-align: center;
+    background: var(--blue) !important;
+    color: white !important;
+    border-radius: 50px !important;
+    padding: 14px 16px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem;
+    transform: none !important;
+    box-shadow: 0 4px 16px rgba(26,107,255,0.3);
+    transition: box-shadow 0.2s, transform 0.2s !important;
+  }
+  .mobile-menu .mob-cta:hover { box-shadow: 0 6px 22px rgba(26,107,255,0.45) !important; transform: translateY(-1px) !important; }
+
+  /* Semi-transparent overlay behind drawer */
+  .menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 180;
+    background: rgba(13,17,23,0.3);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .menu-overlay.open { opacity: 1; }
 
   /* ===== HERO ===== */
   #hero {
@@ -622,15 +711,86 @@
   }
 
   /* ===== RESPONSIVE ===== */
+
+  /* Tablet – do 1024px: trochu zúžit padding */
+  @media (max-width: 1024px) {
+    nav { padding: 0 28px; }
+    .container { padding: 0 28px; }
+    .hero-overlay { padding: 40px 40px 48px; }
+    .price-grid { gap: 16px; }
+  }
+
+  /* Tablet portrait – do 900px: přejít na 1 sloupec, zobrazit hamburger */
   @media (max-width: 900px) {
     nav { padding: 0 20px; }
     .nav-links { display: none; }
-    .hero-overlay { padding: 32px 28px 40px; }
-    .info-grid, .price-grid, .reviews-grid, .equip-grid, .rezervace-layout { grid-template-columns: 1fr; }
-    .gallery-grid { grid-template-columns: 1fr 1fr; }
-    .gallery-item.wide { grid-column: span 1; }
+    .hamburger { display: flex; }
+    .mobile-menu { display: block; }
+    .menu-overlay { display: block; }
+
+    .hero-image-slot { height: 400px; }
+    .hero-overlay { padding: 28px 24px 36px; }
+
+    .section { padding: 56px 0 44px; }
     .container { padding: 0 20px; }
+
+    .info-grid { grid-template-columns: 1fr; gap: 28px; }
+    .price-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+    .reviews-grid { grid-template-columns: 1fr 1fr; }
+    .equip-grid { grid-template-columns: 1fr; }
+    .rezervace-layout { grid-template-columns: 1fr; gap: 36px; }
+
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 180px; }
+    .gallery-item.wide { grid-column: span 1; }
+    .gallery-item.tall { grid-row: span 1; }
+
     .form-row { grid-template-columns: 1fr; }
+    footer { padding: 36px 20px 24px; }
+  }
+
+  /* Mobil – do 600px: plný mobilní layout */
+  @media (max-width: 600px) {
+    .logo { font-size: 1.4rem; }
+
+    .hero-image-slot { height: 320px; }
+    .hero-overlay { padding: 20px 18px 28px; }
+    .hero-overlay h1 { font-size: 2.2rem; letter-spacing: 1px; }
+    .hero-overlay p { font-size: 0.92rem; margin-bottom: 18px; }
+    .hero-btns { flex-direction: column; gap: 10px; }
+    .btn { text-align: center; padding: 13px 24px; width: 100%; }
+
+    .section { padding: 44px 0 32px; }
+    .section-title { font-size: 1.8rem; }
+    .section-sub { font-size: 0.92rem; margin-bottom: 28px; }
+
+    .info-card { padding: 18px; }
+    .info-icon { min-width: 38px; height: 38px; font-size: 1.3rem; }
+
+    .price-card { padding: 24px 20px 28px; }
+    .price-amount { font-size: 2.2rem; }
+
+    .reviews-grid { grid-template-columns: 1fr; }
+    .review-card { padding: 22px; }
+
+    .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 200px; }
+
+    .equip-item { padding: 20px 18px; }
+    .equip-icon-wrap { width: 48px; height: 48px; font-size: 1.5rem; border-radius: 10px; }
+
+    .form-card { padding: 24px 20px; }
+    .rezervace-layout { gap: 28px; }
+
+    footer .foot-logo { font-size: 1.5rem; }
+    footer p { font-size: 0.78rem; }
+  }
+
+  /* Velmi malé displeje – do 380px */
+  @media (max-width: 380px) {
+    .logo { font-size: 1.25rem; letter-spacing: 1px; }
+    .hero-image-slot { height: 260px; }
+    .hero-overlay h1 { font-size: 1.9rem; }
+    .section { padding: 36px 0 28px; }
+    .container { padding: 0 14px; }
   }
 </style>
 </head>
@@ -638,7 +798,7 @@
 
 <!-- NAV -->
 <nav id="mainNav">
-  <a href="#" class="logo">Böhm <span>Garage Care</span></a>
+  <a href="#" class="logo" data-section="info">Böhm <span>Garage Care</span></a>
   <ul class="nav-links">
     <li><a href="#" data-section="info" class="nav-link active">Info</a></li>
     <li><a href="#" data-section="cenik" class="nav-link">Ceník</a></li>
@@ -647,7 +807,26 @@
     <li><a href="#" data-section="vybaveni" class="nav-link">Vybavení</a></li>
     <li><a href="#" data-section="rezervace" class="nav-link nav-cta">Rezervace</a></li>
   </ul>
+  <!-- Hamburger – viditelný pouze na mobilu -->
+  <button class="hamburger" id="hamburger" aria-label="Otevřít menu" aria-expanded="false">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
 </nav>
+
+<!-- Mobile drawer -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#" data-section="info" class="mob-link active">Info</a></li>
+    <li><a href="#" data-section="cenik" class="mob-link">Ceník</a></li>
+    <li><a href="#" data-section="galerie" class="mob-link">Galerie</a></li>
+    <li><a href="#" data-section="reference" class="mob-link">Reference</a></li>
+    <li><a href="#" data-section="vybaveni" class="mob-link">Vybavení</a></li>
+    <li><a href="#" data-section="rezervace" class="mob-link mob-cta">Rezervace</a></li>
+  </ul>
+</div>
 
 <!-- HERO -->
 <div id="hero">
@@ -823,23 +1002,74 @@
 
 <script>
 /* =============================================
+   HAMBURGER MENU
+   ============================================= */
+const hamburger   = document.getElementById('hamburger');
+const mobileMenu  = document.getElementById('mobileMenu');
+const menuOverlay = document.getElementById('menuOverlay');
+
+function openMenu() {
+  hamburger.classList.add('open');
+  mobileMenu.classList.add('open');
+  menuOverlay.classList.add('open');
+  hamburger.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+}
+function closeMenu() {
+  hamburger.classList.remove('open');
+  mobileMenu.classList.remove('open');
+  menuOverlay.classList.remove('open');
+  hamburger.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+
+hamburger.addEventListener('click', () =>
+  hamburger.classList.contains('open') ? closeMenu() : openMenu()
+);
+menuOverlay.addEventListener('click', closeMenu);
+
+// Close drawer on mobile link click
+document.querySelectorAll('.mob-link').forEach(el => {
+  el.addEventListener('click', function(e) {
+    e.preventDefault();
+    switchSection(this.dataset.section);
+    closeMenu();
+  });
+});
+
+/* =============================================
    SECTION SWITCHING
    ============================================= */
 function switchSection(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  // Desktop nav active state
   document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+  const desktopLink = document.querySelector(`.nav-link[data-section="${name}"]`);
+  if (desktopLink) desktopLink.classList.add('active');
+  // Mobile nav active state
+  document.querySelectorAll('.mob-link').forEach(a => a.classList.remove('active'));
+  const mobileLink = document.querySelector(`.mob-link[data-section="${name}"]`);
+  if (mobileLink) mobileLink.classList.add('active');
+
   const sec = document.getElementById('section-' + name);
   if (sec) sec.classList.add('active');
-  const link = document.querySelector('[data-section="' + name + '"].nav-link');
-  if (link) link.classList.add('active');
+
   window.scrollTo({ top: document.getElementById('hero').offsetHeight + 68, behavior: 'smooth' });
 
-  // Lazy-load data sections on first visit
   if (name === 'cenik') loadCenik();
   if (name === 'reference') loadReference();
 }
 
-document.querySelectorAll('[data-section]').forEach(el => {
+// Desktop nav links
+document.querySelectorAll('.nav-link[data-section], .logo[data-section]').forEach(el => {
+  el.addEventListener('click', function(e) {
+    e.preventDefault();
+    switchSection(this.dataset.section);
+  });
+});
+
+// Hero buttons and any other [data-section] links outside nav
+document.querySelectorAll('[data-section]:not(.nav-link):not(.mob-link):not(.logo)').forEach(el => {
   el.addEventListener('click', function(e) {
     e.preventDefault();
     switchSection(this.dataset.section);
@@ -851,66 +1081,109 @@ const nav = document.getElementById('mainNav');
 window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
 
 /* =============================================
-   LOAD CENÍK FROM JSON
+   DATA – ceník a reference
+   Upravujte přímo zde, nebo načtěte z JSON souboru
+   přes HTTP server (fetch funguje jen přes http://)
+   ============================================= */
+
+const CENIK_DATA = [
+  {
+    tier: "Základní", name: "Čistý start", price: "890",
+    featured: false, badge: null,
+    items: ["Ruční mytí exteriéru","Oplach kol a podběhů","Vysátí interiéru","Otření palubní desky","Čištění oken zevnitř"]
+  },
+  {
+    tier: "Kompletní", name: "Detailing Premium", price: "2 490",
+    featured: true, badge: "✦ Nejoblíbenější",
+    items: ["Vše ze základního balíčku","Hloubkové čištění interiéru","Dezinfekce klimatizace","Ošetření plastů a kůže","Voskování laku","Čištění motorového prostoru"]
+  },
+  {
+    tier: "Profesionální", name: "Full Detail", price: "4 990",
+    featured: false, badge: null,
+    items: ["Vše z Premium balíčku","Leštění laku (1-krok)","Keramická ochrana laku","Impregnace čalounění","Ošetření prahů a gumiček","Vůně interiéru dle výběru"]
+  }
+];
+
+const REFERENCE_DATA = [
+  { stars:5, initials:"PK", name:"Pavel Kovář",     car:"BMW 5 F10",           text:"Nechal jsem vyčistit interiér po zimě – přišel se svačinou a odešel s takřka novým autem. Naprosto perfektní práce, doporučuji každému!" },
+  { stars:5, initials:"MN", name:"Markéta Nováková", car:"Audi A3 Sportback",   text:"Komplexní detailing před prodejem vozu. Cena naprosto odpovídá kvalitě. Auto vypadalo jako z autosalonu a prodalo se za lepší cenu, než jsem čekala." },
+  { stars:5, initials:"TO", name:"Tomáš Ondráček",   car:"Škoda Superb III",    text:"Pravidelný zákazník, chodím sem každé jaro a podzim. Vždy přesný termín, vždy skvělý výsledek. Nic bych neměnil." },
+  { stars:4, initials:"JB", name:"Jana Blahová",     car:"VW Tiguan",           text:"Přijeli jsme s autem po dovolené plném písku. Za 4 hodiny jako by se nic nestalo. Moc spokojeni, příšte zkusíme Full Detail." },
+  { stars:5, initials:"LH", name:"Lukáš Horák",      car:"Mercedes C-Class W206",text:"Přátelský přístup, férová cena a výsledek, který předčil moje očekávání. Kůže v interiéru jako nová, lak zrcadlový. Výborná práce!" },
+  { stars:5, initials:"RŠ", name:"Radek Šimánek",    car:"Porsche Macan",       text:"Objednávka přes formulář šla hladce, termín do 2 dnů. Servis trval déle, než jsem čekal, ale výsledek stál za to. Určitě se vrátím!" }
+];
+
+/* =============================================
+   LOAD CENÍK
    ============================================= */
 let cenikLoaded = false;
 async function loadCenik() {
   if (cenikLoaded) return;
   cenikLoaded = true;
   const grid = document.getElementById('price-grid');
-  try {
-    const res = await fetch('cenik.json');
-    const data = await res.json();
-    grid.innerHTML = data.map(card => `
-      <div class="price-card ${card.featured ? 'featured' : ''}">
-        ${card.badge ? `<div class="price-badge">${card.badge}</div>` : ''}
-        <div class="tier">${card.tier}</div>
-        <h3>${card.name}</h3>
-        <div class="price-amount"><sup>od</sup>${card.price}<span class="unit"> Kč</span></div>
-        <ul class="price-list">
-          ${card.items.map(i => `<li>${i}</li>`).join('')}
-        </ul>
-        <a href="#" class="btn ${card.featured ? '' : 'btn-primary'}"
-           ${card.featured ? 'style="background:white;color:var(--blue);font-weight:700;"' : ''}
-           data-section="rezervace">Objednat</a>
-      </div>
-    `).join('');
-    // Re-bind new buttons
-    grid.querySelectorAll('[data-section]').forEach(el =>
-      el.addEventListener('click', e => { e.preventDefault(); switchSection(el.dataset.section); })
-    );
-  } catch(e) {
-    grid.innerHTML = '<p style="color:var(--gray);padding:20px;">Nepodařilo se načíst ceník. Zkontrolujte soubor cenik.json.</p>';
+  let data = CENIK_DATA;
+  // Pokud běžíte přes HTTP server, načte aktuální cenik.json
+  if (location.protocol !== 'file:') {
+    try {
+      const res = await fetch('cenik.json');
+      if (res.ok) data = await res.json();
+    } catch(e) { /* fallback na inline data */ }
   }
+  renderCenik(grid, data);
+}
+
+function renderCenik(grid, data) {
+  grid.innerHTML = data.map(card => `
+    <div class="price-card ${card.featured ? 'featured' : ''}">
+      ${card.badge ? `<div class="price-badge">${card.badge}</div>` : ''}
+      <div class="tier">${card.tier}</div>
+      <h3>${card.name}</h3>
+      <div class="price-amount"><sup>od</sup>${card.price}<span class="unit"> Kč</span></div>
+      <ul class="price-list">
+        ${card.items.map(i => `<li>${i}</li>`).join('')}
+      </ul>
+      <a href="#" class="btn ${card.featured ? '' : 'btn-primary'}"
+         ${card.featured ? 'style="background:white;color:var(--blue);font-weight:700;"' : ''}
+         data-section="rezervace">Objednat</a>
+    </div>
+  `).join('');
+  grid.querySelectorAll('[data-section]').forEach(el =>
+    el.addEventListener('click', e => { e.preventDefault(); switchSection(el.dataset.section); })
+  );
 }
 
 /* =============================================
-   LOAD REFERENCE FROM JSON
+   LOAD REFERENCE
    ============================================= */
 let refLoaded = false;
 async function loadReference() {
   if (refLoaded) return;
   refLoaded = true;
   const grid = document.getElementById('reviews-grid');
-  try {
-    const res = await fetch('reference.json');
-    const data = await res.json();
-    grid.innerHTML = data.map(r => `
-      <div class="review-card">
-        <div class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
-        <p class="review-text">${r.text}</p>
-        <div class="reviewer">
-          <div class="reviewer-avatar">${r.initials}</div>
-          <div>
-            <div class="reviewer-name">${r.name}</div>
-            <div class="reviewer-car">${r.car}</div>
-          </div>
+  let data = REFERENCE_DATA;
+  if (location.protocol !== 'file:') {
+    try {
+      const res = await fetch('reference.json');
+      if (res.ok) data = await res.json();
+    } catch(e) { /* fallback na inline data */ }
+  }
+  renderReference(grid, data);
+}
+
+function renderReference(grid, data) {
+  grid.innerHTML = data.map(r => `
+    <div class="review-card">
+      <div class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
+      <p class="review-text">${r.text}</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">${r.initials}</div>
+        <div>
+          <div class="reviewer-name">${r.name}</div>
+          <div class="reviewer-car">${r.car}</div>
         </div>
       </div>
-    `).join('');
-  } catch(e) {
-    grid.innerHTML = '<p style="color:var(--gray);padding:20px;">Nepodařilo se načíst reference. Zkontrolujte soubor reference.json.</p>';
-  }
+    </div>
+  `).join('');
 }
 
 /* =============================================
@@ -975,22 +1248,29 @@ function handleSubmit(e) {
   });
   canvas.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
 
-  // Pop bubble on click
+  // Pop bubble on click — only the single closest bubble within hit radius
   canvas.addEventListener('click', e => {
+    e.stopPropagation();
     const r = canvas.getBoundingClientRect();
     const cx = e.clientX - r.left;
     const cy = e.clientY - r.top;
+    let closest = null, closestDist = Infinity;
     BUBBLES.forEach(b => {
+      if (b.popping) return;
       const dx = cx - b.x, dy = cy - b.y;
-      if (Math.sqrt(dx*dx + dy*dy) < b.r + 8) popBubble(b);
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < b.r + 12 && dist < closestDist) {
+        closestDist = dist;
+        closest = b;
+      }
     });
+    if (closest) popBubble(closest);
   });
 
   function popBubble(b) {
     if (b.popping) return;
     b.popping = true;
     b.popT = 0;
-    // Respawn after pop animation
     setTimeout(() => {
       b.x = Math.random() * W;
       b.y = H + b.r + 10;
@@ -1001,7 +1281,7 @@ function handleSubmit(e) {
       b.wobble = Math.random() * Math.PI * 2;
       b.wobbleSpeed = 0.01 + Math.random() * 0.015;
       b.popping = false;
-    }, 400);
+    }, 450);
   }
 
   function spawnBubble() {
@@ -1027,6 +1307,7 @@ function handleSubmit(e) {
 
   function drawBubble(b) {
     ctx.save();
+    ctx.globalAlpha = 1; // always reset — prevents alpha bleed between bubbles
     ctx.translate(b.x, b.y);
 
     if (b.popping) {
@@ -1043,8 +1324,11 @@ function handleSubmit(e) {
       for (let i = 0; i < 6; i++) {
         const angle = (i / 6) * Math.PI * 2;
         const dr = t * 55;
+        const dropR = Math.max(0, 3 * (1 - t * 1.5));
+        if (dropR <= 0) continue;
+        ctx.globalAlpha = Math.max(0, 0.9 - t * 2);
         ctx.beginPath();
-        ctx.arc(Math.cos(angle)*dr, Math.sin(angle)*dr, 3*(1-t*1.5), 0, Math.PI*2);
+        ctx.arc(Math.cos(angle)*dr, Math.sin(angle)*dr, dropR, 0, Math.PI*2);
         ctx.fillStyle = 'rgba(200,230,255,0.9)';
         ctx.fill();
       }
@@ -1098,7 +1382,7 @@ function handleSubmit(e) {
 
     BUBBLES.forEach(b => {
       if (b.popping) {
-        b.popT += 0.05;
+        b.popT = Math.min(b.popT + 0.05, 1); // clamp 0–1, no negative radii
         drawBubble(b);
         return;
       }
